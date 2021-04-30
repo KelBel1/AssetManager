@@ -129,43 +129,60 @@ public class AssetDBApplication extends JFrame {
     }
     
     private void add() throws IOException {
-    	
+    	//Initialize variables
     	String response;
     	PreparedStatement insertAsset;
     	
     	String dateAssigned;
-    	String purshaseDate;
+    	String purchaseDate;
     	String brand;
     	String model;
     	String series;
     	String serviceTag;
     	String serialNum;
-    	String assetType;
-    	String Cost;
+    	String cost;
+    	
+    	//Input dialog boxes to save responses to variables
+    	response = JOptionPane.showInputDialog("Type a Date Assigned");
+    	dateAssigned = response;
+    	response = JOptionPane.showInputDialog("Type a Purchase Date");
+    	purchaseDate = response;
+    	response = JOptionPane.showInputDialog("Type a Brand");
+    	brand = response;
+    	response = JOptionPane.showInputDialog("Type a Model");
+    	model = response;
+    	response = JOptionPane.showInputDialog("Type a Series");
+    	series = response;
+    	response = JOptionPane.showInputDialog("Type a Service Tag");
+    	serviceTag = response;
+    	response = JOptionPane.showInputDialog("Type a Serial Number");
+    	serialNum = response;
+    	response = JOptionPane.showInputDialog("Type a Cost");
+    	cost = response;
     	
     	
-    	response = JOptionPane.showInputDialog("Type a response");
-    	
-    	
+    	//create SQL statement for INSERT
     	String sqlStatement = "INSERT INTO Assets (Brand, Model, Series, ServiceTag, SerialNum,"
-    						+ "AssetType, PurchaseDate, DateAssigned, Cost) " 
-    						+ "VALUE ()"; // create SQL query with response data
+    						+ "PurchaseDate, DateAssigned, Cost) " 
+    						+ "VALUE (" + brand + "," + model + "," + series + "," +
+    						serviceTag + "," + serialNum + "," + purchaseDate + "," + 
+    						dateAssigned + "," + cost +")"; // create SQL query with response data
     	
     	
     	 try{
-    		Connection conn = getConnection();
+    		Connection conn = getConnection(); // open DB connection
     		
-    		// insertAsset = conn.prepareStatement(sqlStatement); // set PreparedStatement value
+    		insertAsset = conn.prepareStatement(sqlStatement); // set PreparedStatement value
     		
     		
-    		// insertAsset.executeUpdate(); // execute PreparedStatement
-    		conn.commit(); // commit chanes to DB
+    		insertAsset.executeUpdate(); // execute PreparedStatement
+    		conn.commit(); // commit changes to DB
     		conn.close(); // close DB connection 
     	}catch(Exception e){
     		e.printStackTrace();
     		textArea.setText("Could not add Asset.");
     	}finally{
-    		textArea.setText("Asset added."); 	// Confirmation message to textArea on success/error
+    		textArea.setText("Added Asset."); 	// Confirmation message to textArea on success/error
     	}
     	
     	
@@ -177,12 +194,36 @@ public class AssetDBApplication extends JFrame {
     
     private void showAll() throws IOException {
     	//The logic to show all assets in the database goes here
+    	String displayText = "";
+    	try{
+    		Connection conn = getConnection(); // open db connection
+    		
+    		//select statement for all assets in a prepared statement
+    		PreparedStatement statement = conn.prepareStatement("SELECT * FROM assets"); 
+    		
+    		ResultSet result = statement.executeQuery(); //execute SELECT statement
+    		
+    		ArrayList<String> array = new ArrayList<String>(); //array to store individual records
+    		while(result.next()){
+    			
+    			//recursively show all in textArea
+    			displayText = result.getString("AssetID") + " " + result.getString("brand") + 
+    					result.getString("Model") + " " + result.getString("Series") + 
+    					result.getString("ServiceTag") + " " + result.getString("SerialNum") + 
+    					result.getString("PurchaseDate") + " " + result.getString("DateAssigned") + 
+    					result.getString("Cost");
+    			array.add(displayText);
+    		}
+    		//Brand, Model, Series, ServiceTag, SerialNum," + "PurchaseDate, DateAssigned, Cost
+    		textArea.setText(array.toString());
+    		conn.close(); //close db connection
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
     	
     	
-    	//select statement for all assets in a prepared statement
-    	//executeUpdate preparedStatement
-    	//recursively show all in textArea
-    	//close db connection
+    	
+    	
     }
     
     private void edit() throws IOException {
@@ -202,12 +243,29 @@ public class AssetDBApplication extends JFrame {
 
     private void delete()throws Exception {
 		//The logic to delete an asset in the database goes here
-    	
+    	String response;
+    	String assetID;
     	//select by AssetID 
-    	//create delete prepared statement
-    	//execute update on preparedstatement
-    	//comit changes
-    	//close db connection
+    	
+    	response = JOptionPane.showInputDialog("Enter asset ID of asset to be deleted.");
+    	assetID = response;
+    	try{
+    		Connection conn = getConnection(); //open DB connection
+    		//prepare DELETE statement
+    		PreparedStatement deleteStatement = conn.prepareStatement("DELETE FROM assets WHERE AssetID='"+ assetID + "';");
+    		
+    		if(assetID == null){
+    			conn.close(); //close DB connection if assetID response is null
+    			textArea.setText("No assetID was entered.");
+    		}else{
+    			deleteStatement.executeUpdate(); //execute PreparedStatement
+        		conn.commit(); //commit changes to DB
+    		}
+    		
+    		conn.close(); //close DB connection 
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
     }
     
 	public static Connection getConnection() throws Exception {
@@ -238,7 +296,9 @@ public class AssetDBApplication extends JFrame {
 	 */
 	public static void main(String[] args) throws IOException {
 		
-		SwingUtilities.invokeLater(new Runnable() {
+		//TODO run SQL scripts to insert mock data into tables for user
+		
+		SwingUtilities.invokeLater(new Runnable(){
             @Override
             public void run() {
                 new AssetDBApplication().setVisible(true);
