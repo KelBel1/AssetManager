@@ -132,7 +132,6 @@ public class AssetDBApplication extends JFrame {
     	String response;
     	PreparedStatement insertAsset;
     	
-    	
     	String dateAssigned;
     	String purshaseDate;
     	String brand;
@@ -142,9 +141,14 @@ public class AssetDBApplication extends JFrame {
     	String serialNum;
     	String assetType;
     	String Cost;
+    	
+    	
     	response = JOptionPane.showInputDialog("Type a response");
     	
-    	String sqlStatement = ""; // create SQL query with response data
+    	
+    	String sqlStatement = "INSERT INTO Assets (Brand, Model, Series, ServiceTag, SerialNum,"
+    						+ "AssetType, PurchaseDate, DateAssigned, Cost) " 
+    						+ "VALUE ()"; // create SQL query with response data
     	
     	
     	 try{
