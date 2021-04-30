@@ -26,8 +26,9 @@ public class AssetDBApplication extends JFrame {
 	private JTextArea textArea;
     private JButton buttonAdd = new JButton("Add Asset");
     private JButton buttonShowAll = new JButton("Show All Assets");
-    private JButton buttonView = new JButton("View an Asset");
+    private JButton buttonEdit = new JButton("Edit an Asset");
     private JButton buttonDelete = new JButton("Delete an Asset");
+  
    
     
     /**
@@ -55,11 +56,11 @@ public class AssetDBApplication extends JFrame {
         constraints.gridx = 1;
         add(buttonShowAll, constraints);
         constraints.gridx = 2;
-        add(buttonView, constraints);
+        add(buttonEdit, constraints);
         constraints.gridx = 0;
         constraints.gridy = 2;
         add(buttonDelete, constraints);
-        
+       
          
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -98,12 +99,12 @@ public class AssetDBApplication extends JFrame {
             }
         });
         
-        buttonView.addActionListener(new ActionListener() {
+        buttonEdit.addActionListener(new ActionListener() {
         	@Override
             public void actionPerformed(ActionEvent evt) {
                 try {
                 	textArea.setText("");
-                	view();
+                	edit();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -158,31 +159,55 @@ public class AssetDBApplication extends JFrame {
     		
     		
     		// insertAsset.executeUpdate(); // execute PreparedStatement
+    		conn.commit(); // commit chanes to DB
     		conn.close(); // close DB connection 
     	}catch(Exception e){
     		e.printStackTrace();
     		textArea.setText("Could not add Asset.");
     	}finally{
-    		textArea.setText("Asset added.");
+    		textArea.setText("Asset added."); 	// Confirmation message to textArea on success/error
     	}
     	
     	
     	
     	
-    	// Confirmation message to textArea on success/error
+    
     	
     }
     
     private void showAll() throws IOException {
     	//The logic to show all assets in the database goes here
+    	
+    	
+    	//select statement for all assets in a prepared statement
+    	//executeUpdate preparedStatement
+    	//recursively show all in textArea
+    	//close db connection
     }
     
-    private void view() throws IOException {
+    private void edit() throws IOException {
     	//The logic for viewing one asset in the database goes here
+    	
+    	//display input dialog
+    	//display scrollframe 
+    	//Show all assets in scrollframe
+    	//select asset by service tag/serial id in input dialog
+    	//change employee/ location prompt for both? or prompt for all 
+    	//create preparedStatement
+    	//commit changes
+    	//close db connection
+    	
+    	
     }
 
     private void delete()throws Exception {
 		//The logic to delete an asset in the database goes here
+    	
+    	//select by AssetID 
+    	//create delete prepared statement
+    	//execute update on preparedstatement
+    	//comit changes
+    	//close db connection
     }
     
 	public static Connection getConnection() throws Exception {
