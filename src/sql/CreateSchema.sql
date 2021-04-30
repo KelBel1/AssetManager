@@ -16,7 +16,7 @@ Cost decimal(19,4)
 );
 
 CREATE TABLE if not exists Employee (
-EmployeeID int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+EmployeeID int(5) AUTO_INCREMENT NOT NULL PRIMARY KEY,
 EmpFirstName varchar(255),
 EmpLastName varchar(255),
 RoomNum int
