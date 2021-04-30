@@ -128,7 +128,11 @@ public class AssetDBApplication extends JFrame {
     }
     
     private void add() throws IOException {
+    	
     	String response;
+    	PreparedStatement insertAsset;
+    	
+    	
     	String dateAssigned;
     	String purshaseDate;
     	String brand;
@@ -139,15 +143,27 @@ public class AssetDBApplication extends JFrame {
     	String assetType;
     	String Cost;
     	response = JOptionPane.showInputDialog("Type a response");
-    	textArea.setText(response); // testing data save
     	
-    	// Set variable fields with showInputDialog responses
+    	String sqlStatement = ""; // create SQL query with response data
     	
-    	// Create Prepared Statement
     	
-    	// getConnection()
+    	 try{
+    		Connection conn = getConnection();
+    		
+    		// insertAsset = conn.prepareStatement(sqlStatement); // set PreparedStatement value
+    		
+    		
+    		// insertAsset.executeUpdate(); // execute PreparedStatement
+    		conn.close(); // close DB connection 
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		textArea.setText("Could not add Asset.");
+    	}finally{
+    		textArea.setText("Asset added.");
+    	}
     	
-    	// Send SQL INSERT statement
+    	
+    	
     	
     	// Confirmation message to textArea on success/error
     	
@@ -171,7 +187,7 @@ public class AssetDBApplication extends JFrame {
 			String driver = "com.mysql.cj.jdbc.Driver";
 			String url = "jdbc:mysql://localhost:3306/AssetDB";
 			String username = "root";
-			String password = "password";
+			String password = "root";
 			Class.forName(driver);
 			
 			Connection con = DriverManager.getConnection(url, username, password);
