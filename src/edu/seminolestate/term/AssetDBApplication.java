@@ -13,9 +13,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -26,6 +28,7 @@ public class AssetDBApplication extends JFrame {
     private JButton buttonShowAll = new JButton("Show All Assets");
     private JButton buttonView = new JButton("View an Asset");
     private JButton buttonDelete = new JButton("Delete an Asset");
+   
     
     /**
      * Define the dimensions of the GUI window
@@ -56,6 +59,7 @@ public class AssetDBApplication extends JFrame {
         constraints.gridx = 0;
         constraints.gridy = 2;
         add(buttonDelete, constraints);
+        
          
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -124,7 +128,29 @@ public class AssetDBApplication extends JFrame {
     }
     
     private void add() throws IOException {
-    	//The logic for adding an asset to the database goes here
+    	String response;
+    	String dateAssigned;
+    	String purshaseDate;
+    	String brand;
+    	String model;
+    	String series;
+    	String serviceTag;
+    	String serialNum;
+    	String assetType;
+    	String Cost;
+    	response = JOptionPane.showInputDialog("Type a response");
+    	textArea.setText(response); // testing data save
+    	
+    	// Set variable fields with showInputDialog responses
+    	
+    	// Create Prepared Statement
+    	
+    	// getConnection()
+    	
+    	// Send SQL INSERT statement
+    	
+    	// Confirmation message to textArea on success/error
+    	
     }
     
     private void showAll() throws IOException {
