@@ -1,18 +1,10 @@
 USE AssetDB;
 
-ALTER TABLE location
-DROP FOREIGN KEY FK_Loc_EmployeeID;
-ALTER TABLE location
-DROP FOREIGN KEY FK_Loc_AssetID;
-ALTER TABLE employee
-DROP FOREIGN KEY FK_Emp_AssetID;
-ALTER TABLE employee
-DROP FOREIGN KEY FK_Emp_RoomNum;
-ALTER TABLE assets
-DROP FOREIGN KEY FK_As_RoomNum;
-ALTER TABLE assets
-DROP FOREIGN KEY FK_As_EmployeeID;
+ALTER TABLE assetcheckout
+DROP FOREIGN KEY FK_Chk_EmployeeID;
+ALTER TABLE assetcheckout
+DROP FOREIGN KEY FK_Chk_AssetID;
 
-DROP TABLE location;
+DROP TABLE assetcheckout;
 DROP TABLE employee;
 DROP TABLE assets;
