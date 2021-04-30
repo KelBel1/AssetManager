@@ -4,8 +4,6 @@ USE AssetDB;
 
 CREATE TABLE if not exists Assets (
 AssetID int AUTO_INCREMENT NOT NULL PRIMARY KEY,
-RoomNum int,
-EmployeeID int,
 Brand varchar(255),
 Model varchar(255),
 Series int, 
@@ -21,27 +19,16 @@ CREATE TABLE if not exists Employee (
 EmployeeID int AUTO_INCREMENT NOT NULL PRIMARY KEY,
 EmpFirstName varchar(255),
 EmpLastName varchar(255),
-RoomNum int,
-AssetID int,
-FOREIGN KEY (AssetID) REFERENCES Assets(AssetID)
+RoomNum int
 );
 
-CREATE TABLE if not exists Location (
-RoomNum int NOT NULL PRIMARY KEY,
+CREATE TABLE if not exists AssetCheckout (
+CheckoutID int AUTO_INCREMENT NOT NULL PRIMARY KEY,
 EmployeeID int,
 AssetID int,
-FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
-FOREIGN KEY (AssetID) REFERENCES Assets(AssetID)
+CONSTRAINT FK_chk_EmployeeID FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID) ON UPDATE CASCADE,
+CONSTRAINT FK_Chk_AssetID FOREIGN KEY (AssetID) REFERENCES Assets(AssetID) ON UPDATE CASCADE
 );
-
-ALTER TABLE Assets
-ADD FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID); 
-ALTER TABLE Assets
-ADD FOREIGN KEY (RoomNum) REFERENCES Location(RoomNum);
-ALTER TABLE Employee
-ADD FOREIGN KEY (RoomNum) REFERENCES Location(RoomNum);
-
-
 
 
 

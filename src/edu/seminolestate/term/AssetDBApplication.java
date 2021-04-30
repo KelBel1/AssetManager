@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -128,8 +129,27 @@ public class AssetDBApplication extends JFrame {
     
     private void add() throws IOException {
     	String response;
+    	String dateAssigned;
+    	String purshaseDate;
+    	String brand;
+    	String model;
+    	String series;
+    	String serviceTag;
+    	String serialNum;
+    	String assetType;
+    	String Cost;
     	response = JOptionPane.showInputDialog("Type a response");
-    	textArea.setText(response);
+    	textArea.setText(response); // testing data save
+    	
+    	// Set variable fields with showInputDialog responses
+    	
+    	// Create Prepared Statement
+    	
+    	// getConnection()
+    	
+    	// Send SQL INSERT statement
+    	
+    	// Confirmation message to textArea on success/error
     	
     }
     
