@@ -5,15 +5,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import org.apache.ibatis.jdbc.ScriptRunner;
 
 public class AssetDBApplication extends JFrame {
 	private JTextArea textArea;
@@ -210,8 +212,8 @@ public class AssetDBApplication extends JFrame {
     			displayText = result.getString("AssetID") + " " + result.getString("brand") + 
     					result.getString("Model") + " " + result.getString("Series") + 
     					result.getString("ServiceTag") + " " + result.getString("SerialNum") + 
-    					result.getString("PurchaseDate") + " " + result.getString("DateAssigned") + 
-    					result.getString("Cost");
+    					result.getString("DatePurchased") + " " + result.getString("DateAssigned") + 
+    					result.getString("Cost") + "\n------------------------------ \n";
     			array.add(displayText);
     		}
     		//Brand, Model, Series, ServiceTag, SerialNum," + "PurchaseDate, DateAssigned, Cost
@@ -228,15 +230,58 @@ public class AssetDBApplication extends JFrame {
     
     private void edit() throws IOException {
     	//The logic for viewing one asset in the database goes here
-    	
+    	String response;
+    	String assetID;
+    	String employeeID;
+    	String roomNum;
+    	Connection conn;
     	//display input dialog
-    	//display scrollframe 
-    	//Show all assets in scrollframe
-    	//select asset by service tag/serial id in input dialog
+    	response = JOptionPane.showInputDialog("Enter AssetID of asset to be editted");
+    	assetID = response;
+    	
     	//change employee/ location prompt for both? or prompt for all 
-    	//create preparedStatement
-    	//commit changes
-    	//close db connection
+    	response = JOptionPane.showInputDialog("Enter employeeID assignment. (Leave blank for no assignment)");
+    	employeeID = response;
+    	
+    	response = JOptionPane.showInputDialog("Enter new room number assignment.");
+    	roomNum = response;
+    	
+    	if(roomNum != null && employeeID != null){
+    		try{
+    			conn = getConnection();
+    			
+    			PreparedStatement updateEmpStatement = conn.prepareStatement("ALTER TABLE assets " + 
+    			"SET EmployeeID='" + employeeID + "' WHERE AssetID='" + assetID + "'");
+    			
+    			PreparedStatement updateRoomStatement = conn.prepareStatement("ALTER TABLE assets " + 
+    	    	"SET RoomNum='" + roomNum + "' WHERE AssetID='" + assetID + "'");
+    			
+    			
+    			
+    	    	conn.close();//close db connection
+    		}catch(Exception e){
+    			e.printStackTrace();
+    		}
+    	}else if (roomNum == null && employeeID != null){
+    		try{
+    			conn = getConnection();
+    			PreparedStatement updateEmpStatement = conn.prepareStatement("ALTER TABLE assets " + 
+    			"SET EmployeeID='" + employeeID + "' WHERE AssetID='" + assetID + "'");
+    			
+    			
+    			conn.close();//close db connection
+    		}catch(Exception e){
+    			e.printStackTrace();
+    		}
+    	}else if(roomNum == null){
+    		try{
+    			conn = getConnection();
+    			conn.close();//close db connection
+    			textArea.setText("Must enter a valid room number to make changes");
+    		}catch(Exception e){
+    			e.printStackTrace();
+    		}
+    	}
     	
     	
     }
@@ -294,10 +339,15 @@ public class AssetDBApplication extends JFrame {
 	 * @param args s
 	 * @throws IOException s
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, Exception {
 		
+		 String mysqlUrl = "jdbc:mysql://localhost/assetdb";
+	      Connection con = DriverManager.getConnection(mysqlUrl, "root", "root");
+	      System.out.println("Connection established......");
+	      ScriptRunner sr = new ScriptRunner(con);
+	      Reader reader = new BufferedReader(new FileReader("D:\\Database\\Homework\\Project\\AssetManager-main (1)\\AssetManager-main\\src\\sql\\CreateSchema.sql"));
+	      sr.runScript(reader);
 		//TODO run SQL scripts to insert mock data into tables for user
-		
 		SwingUtilities.invokeLater(new Runnable(){
             @Override
             public void run() {
